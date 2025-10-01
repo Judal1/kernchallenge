@@ -7,3 +7,4 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev')
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    WTF_CSRF_SECRET_KEY = os.environ.get('CSRF_SECRET_KEY', 'change_this_csrf_key')
