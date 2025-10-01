@@ -3,6 +3,7 @@ import { hashPassword } from './crypto';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
+import Projects from './Projects';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 
@@ -14,6 +15,7 @@ function AppNavbar({ token, onLogout }) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
+            <Nav.Link as={Link} to="/projects">Projects</Nav.Link>
             {!token ? (
               <>
                 <Nav.Link as={Link} to="/register">Sign up</Nav.Link>
@@ -43,8 +45,16 @@ function Home() {
 }
 
 function App() {
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState(() => localStorage.getItem('authToken') || '');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem('authToken', token);
+    } else {
+      localStorage.removeItem('authToken');
+    }
+  }, [token]);
 
   const handleLogin = (tok) => {
     setToken(tok);
@@ -67,6 +77,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register onSuccess={handleRegisterSuccess} />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/projects" element={<Projects token={token} />} />
         <Route path="/logout" element={<Navigate to="/" />} />
       </Routes>
     </>
