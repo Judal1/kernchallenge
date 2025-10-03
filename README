@@ -6,32 +6,26 @@
 	- PostgreSQL
 
 2. **Cloner le dépôt**
-	```powershell
 	git clone https://github.com/Judal1/kernchallenge.git
 	cd kernchallenge
-	```
 
 3. **Configurer le backend**
-	```powershell
 	cd backend
 	python -m venv venv
 	venv\Scripts\activate
 	pip install -r requirements.txt
-	```
-	- Créez une base de données PostgreSQL
-  - Crées un .env sur base du .env.example, et remplissez le avec les données de connection a votre base de données ainsi que la secret key flask.
+
+  - Créez une base de données PostgreSQL
+  - Créez un .env sur base du .env.example, et remplissez le avec les données de connection a votre base de données ainsi que la secret key flask.
 
 4. **Configurer le frontend**
-	```powershell
 	cd ..\frontend
 	npm install
-	```
 
 5. **Démarrer le frontend et le backend**
-	```powershell
 	python launch.py
-	```
-	- Le frontend tourne sur le port 3000 par défaut.
+	
+  - Le frontend tourne sur le port 3000 par défaut.
   - le backend tourne sur le port 5000 par défaut.
 
 6. **Accéder à l'application**
