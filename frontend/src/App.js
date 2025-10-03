@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } f
 import Register from './Register';
 import Login from './Login';
 import Projects from './Projects';
+import TimeEntries from './TimeEntries';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 
@@ -16,6 +17,7 @@ function AppNavbar({ token, onLogout }) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
             <Nav.Link as={Link} to="/projects">Projects</Nav.Link>
+            <Nav.Link as={Link} to="/time-entries">Time Entries</Nav.Link>
             {!token ? (
               <>
                 <Nav.Link as={Link} to="/register">Sign up</Nav.Link>
@@ -46,6 +48,7 @@ function Home() {
 
 function App() {
   const [token, setToken] = useState(() => localStorage.getItem('authToken') || '');
+  const [csrfToken, setCsrfToken] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,6 +57,12 @@ function App() {
     } else {
       localStorage.removeItem('authToken');
     }
+  }, [token]);
+
+  useEffect(() => {
+    fetch('/api/csrf-token')
+      .then(res => res.json())
+      .then(data => setCsrfToken(data.csrf_token));
   }, [token]);
 
   const handleLogin = (tok) => {
@@ -77,7 +86,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register onSuccess={handleRegisterSuccess} />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/projects" element={<Projects token={token} />} />
+        <Route path="/projects" element={<Projects token={token} csrfToken={csrfToken} />} />
+        <Route path="/time-entries" element={<TimeEntries token={token} csrfToken={csrfToken} />} />
         <Route path="/logout" element={<Navigate to="/" />} />
       </Routes>
     </>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function Projects({ token }) {
+export default function Projects({ token, csrfToken }) {
   const [projects, setProjects] = useState([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -10,7 +10,6 @@ export default function Projects({ token }) {
   const [editName, setEditName] = useState('');
   const [editDescription, setEditDescription] = useState('');
   const [message, setMessage] = useState('');
-  const [csrfToken, setCsrfToken] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,9 +17,6 @@ export default function Projects({ token }) {
       navigate('/login');
       return;
     }
-    fetch('/api/csrf-token')
-      .then(res => res.json())
-      .then(data => setCsrfToken(data.csrf_token));
     fetchProjects();
     // eslint-disable-next-line
   }, [token]);
@@ -45,7 +41,7 @@ export default function Projects({ token }) {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
-        'X-CSRFToken': csrfToken
+        'X-CSRF-Token': csrfToken
       },
       body: JSON.stringify({ name, description })
     })
@@ -64,7 +60,7 @@ export default function Projects({ token }) {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
-        'X-CSRFToken': csrfToken
+        'X-CSRF-Token': csrfToken
       }
     })
       .then(res => res.json())
@@ -88,7 +84,7 @@ export default function Projects({ token }) {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
-        'X-CSRFToken': csrfToken
+        'X-CSRF-Token': csrfToken
       },
       body: JSON.stringify({ name: editName, description: editDescription })
     })
