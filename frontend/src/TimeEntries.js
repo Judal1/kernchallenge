@@ -42,8 +42,8 @@ function TimeEntries({ token, csrfToken }) {
     fetch('/api/time-entries', {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(res => res.json())
-      .then(setEntries);
+        .then(res => res.json())
+        .then(data => setEntries(Array.isArray(data) ? data : []));
   }, [token, navigate]);
 
   const handleChange = e => {

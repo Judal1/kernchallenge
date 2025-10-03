@@ -25,8 +25,8 @@ export default function Projects({ token, csrfToken }) {
     fetch('/api/projects', {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(res => res.json())
-      .then(data => setProjects(data));
+        .then(res => res.json())
+        .then(data => setProjects(Array.isArray(data) ? data : []));
   };
 
   const handleCreate = (e) => {

@@ -24,7 +24,7 @@ export default function Login({ onLogin }) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken
+        'X-CSRF-Token': csrfToken
       },
       body: JSON.stringify({ username, password: hashed })
     })

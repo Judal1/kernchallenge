@@ -6,6 +6,18 @@ from datetime import datetime
 
 api_bp = Blueprint('api', __name__)
 
+@api_bp.route('/current-user', methods=['GET'])
+@jwt_required()
+def current_user():
+    user = User.query.filter_by(username=get_jwt_identity()).first()
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+    return jsonify({
+        'id': user.id,
+        'username': user.username,
+        'created_at': user.created_at.isoformat() if hasattr(user, 'created_at') else None
+    })
+
 @api_bp.route('/ping')
 def ping():
     return jsonify({'message': 'pong'})

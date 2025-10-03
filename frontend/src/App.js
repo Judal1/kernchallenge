@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { hashPassword } from './crypto';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import Projects from './Projects';
 import TimeEntries from './TimeEntries';
+import CalendarDashboard from './CalendarDashboard';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 
@@ -33,7 +33,10 @@ function AppNavbar({ token, onLogout }) {
   );
 }
 
-function Home() {
+function Home({ token, csrfToken, user }) {
+  if (token) {
+    return <CalendarDashboard token={token} csrfToken={csrfToken} user={user} />;
+  }
   return (
     <div className="d-flex flex-column justify-content-center align-items-center min-vh-100 bg-light">
       <div className="container-fluid">
@@ -49,13 +52,29 @@ function Home() {
 function App() {
   const [token, setToken] = useState(() => localStorage.getItem('authToken') || '');
   const [csrfToken, setCsrfToken] = useState('');
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
       localStorage.setItem('authToken', token);
+      // Fetch current user info
+      fetch('/api/current-user', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('User fetch failed');
+          return res.json();
+        })
+        .then(data => setUser(data))
+        .catch(() => {
+          setUser(null);
+          setToken('');
+          localStorage.removeItem('authToken');
+        });
     } else {
       localStorage.removeItem('authToken');
+      setUser(null);
     }
   }, [token]);
 
@@ -83,7 +102,7 @@ function App() {
     <>
       <AppNavbar token={token} onLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home token={token} csrfToken={csrfToken} user={user} />} />
         <Route path="/register" element={<Register onSuccess={handleRegisterSuccess} />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/projects" element={<Projects token={token} csrfToken={csrfToken} />} />

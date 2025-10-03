@@ -15,7 +15,7 @@ export default function Register({ onSuccess }) {
       .then(res => res.json())
       .then(data => setCsrfToken(data.csrf_token));
   }, []);
-
+  
   const handleRegister = async (e) => {
     e.preventDefault();
     setMessage('');
@@ -29,7 +29,7 @@ export default function Register({ onSuccess }) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken
+        'X-CSRF-Token': csrfToken
       },
       body: JSON.stringify({ username, password: hashed })
     })
