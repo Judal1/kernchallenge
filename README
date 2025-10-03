@@ -1,13 +1,3 @@
-# KERN IT Challenges
-
-This is the KERN IT Challenges that we use in our recruitment process
-
-It's for backend, frontend, fullstack and ux designer
-
-You can choose one project and share with us your project via github or gitlab or figma
-
-
-
 ## Instructions pour utiliser ce code
 
 1. **Installer les prérequis**
@@ -17,7 +7,7 @@ You can choose one project and share with us your project via github or gitlab o
 
 2. **Cloner le dépôt**
 	```powershell
-	git clone <url-du-repo>
+	git clone https://github.com/Judal1/kernchallenge.git
 	cd kernchallenge
 	```
 
@@ -28,30 +18,21 @@ You can choose one project and share with us your project via github or gitlab o
 	venv\Scripts\activate
 	pip install -r requirements.txt
 	```
-	- Créez une base de données PostgreSQL et mettez à jour `app/config.py` avec vos identifiants.
-	- Lancez les migrations si besoin (ex: Flask-Migrate).
+	- Créez une base de données PostgreSQL
+  - Crées un .env sur base du .env.example, et remplissez le avec les données de connection a votre base de données ainsi que la secret key flask.
 
-4. **Démarrer le backend**
-	```powershell
-	python run.py
-	```
-	- Le backend démarre sur le port configuré (par défaut : 5000).
-
-5. **Configurer le frontend**
+4. **Configurer le frontend**
 	```powershell
 	cd ..\frontend
 	npm install
 	```
 
-6. **Démarrer le frontend**
+5. **Démarrer le frontend et le backend**
 	```powershell
-	npm start
+	python launch.py
 	```
 	- Le frontend tourne sur le port 3000 par défaut.
+  - le backend tourne sur le port 5000 par défaut.
 
-7. **Accéder à l'application**
+6. **Accéder à l'application**
 	- Ouvrez votre navigateur sur `http://localhost:3000`
-
----
-
-Pour toute question, contactez-nous !
