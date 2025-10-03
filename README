@@ -6,4 +6,52 @@ It's for backend, frontend, fullstack and ux designer
 
 You can choose one project and share with us your project via github or gitlab or figma
 
-Send us an email to jobs@kern-it.be
+
+
+## Instructions pour utiliser ce code
+
+1. **Installer les prérequis**
+	- Python 3.10 ou plus
+	- Node.js (v18+) et npm
+	- PostgreSQL
+
+2. **Cloner le dépôt**
+	```powershell
+	git clone <url-du-repo>
+	cd kernchallenge
+	```
+
+3. **Configurer le backend**
+	```powershell
+	cd backend
+	python -m venv venv
+	venv\Scripts\activate
+	pip install -r requirements.txt
+	```
+	- Créez une base de données PostgreSQL et mettez à jour `app/config.py` avec vos identifiants.
+	- Lancez les migrations si besoin (ex: Flask-Migrate).
+
+4. **Démarrer le backend**
+	```powershell
+	python run.py
+	```
+	- Le backend démarre sur le port configuré (par défaut : 5000).
+
+5. **Configurer le frontend**
+	```powershell
+	cd ..\frontend
+	npm install
+	```
+
+6. **Démarrer le frontend**
+	```powershell
+	npm start
+	```
+	- Le frontend tourne sur le port 3000 par défaut.
+
+7. **Accéder à l'application**
+	- Ouvrez votre navigateur sur `http://localhost:3000`
+
+---
+
+Pour toute question, contactez-nous !
