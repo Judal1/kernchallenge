@@ -19,6 +19,14 @@ function TimeEntries({ token, csrfToken }) {
     start_time: '',
     end_time: ''
   });
+  const [search, setSearch] = useState({
+    project_id: '',
+    description: '',
+    min_duration: '',
+    max_duration: '',
+    start_date: '',
+    end_date: ''
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -129,6 +137,18 @@ function TimeEntries({ token, csrfToken }) {
       });
   };
 
+  // Filtering logic
+  const filteredEntries = entries.filter(e => {
+    let match = true;
+    if (search.project_id && String(e.project_id) !== String(search.project_id)) match = false;
+    if (search.description && !e.description.toLowerCase().includes(search.description.toLowerCase())) match = false;
+    if (search.min_duration && e.duration < parseInt(search.min_duration)) match = false;
+    if (search.max_duration && e.duration > parseInt(search.max_duration)) match = false;
+    if (search.start_date && new Date(e.start_time) < new Date(search.start_date)) match = false;
+    if (search.end_date && new Date(e.end_time) > new Date(search.end_date)) match = false;
+    return match;
+  });
+
   return (
     <div className="container mt-4">
       <h2>Time Entries</h2>
@@ -156,6 +176,34 @@ function TimeEntries({ token, csrfToken }) {
           </div>
         </div>
       </form>
+      <div className="mb-4 p-3 bg-light rounded shadow-sm">
+        <h5>Search & Filter</h5>
+        <div className="row g-2">
+          <div className="col-md-2">
+            <select name="project_id" className="form-control" value={search.project_id} onChange={e => setSearch({ ...search, project_id: e.target.value })}>
+              <option value="">All Projects</option>
+              {projects.map(p => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="col-md-2">
+            <input name="description" className="form-control" placeholder="Description" value={search.description} onChange={e => setSearch({ ...search, description: e.target.value })} />
+          </div>
+          <div className="col-md-2">
+            <input name="min_duration" type="number" className="form-control" placeholder="Min Duration" value={search.min_duration} onChange={e => setSearch({ ...search, min_duration: e.target.value })} />
+          </div>
+          <div className="col-md-2">
+            <input name="max_duration" type="number" className="form-control" placeholder="Max Duration" value={search.max_duration} onChange={e => setSearch({ ...search, max_duration: e.target.value })} />
+          </div>
+          <div className="col-md-2">
+            <input name="start_date" type="datetime-local" className="form-control" value={search.start_date} onChange={e => setSearch({ ...search, start_date: e.target.value })} />
+          </div>
+          <div className="col-md-2">
+            <input name="end_date" type="datetime-local" className="form-control" value={search.end_date} onChange={e => setSearch({ ...search, end_date: e.target.value })} />
+          </div>
+        </div>
+      </div>
       <table className="table table-striped">
         <thead>
           <tr>
@@ -168,7 +216,7 @@ function TimeEntries({ token, csrfToken }) {
           </tr>
         </thead>
         <tbody>
-          {entries.map(e => (
+          {filteredEntries.map(e => (
             editId === e.id ? (
               <tr key={e.id}>
                 <td>
